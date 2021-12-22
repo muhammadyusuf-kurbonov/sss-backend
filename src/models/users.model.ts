@@ -4,6 +4,7 @@
 // for more of what you can do here.
 import { Application } from '../declarations';
 import { Model, Mongoose, Schema } from 'mongoose';
+import { TeamModel } from './team.model';
 
 export type UserModel = {
   _id: Schema.Types.ObjectId;
@@ -11,6 +12,7 @@ export type UserModel = {
   email: string;
   avatarUrl: string;
   teamId: string|Schema.Types.ObjectId;
+  team: TeamModel;
 };
 
 export default function (app: Application): Model<UserModel> {
