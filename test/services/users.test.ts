@@ -74,4 +74,28 @@ describe('\'users\' service', () => {
     assert.strictEqual(updatedUser._id.toString(), user._id.toString());
   });
 
+
+  it('update a user: change team', async () => {
+    const user = await createUser(app);
+
+    const updatedUser = await app.service('users').patch(user._id, {
+      teamId: 'team-2',
+    });
+
+    assert.ok(updatedUser, 'Updated a user');
+    assert.ok(updatedUser._id, 'User has an id');
+    assert.notStrictEqual(updatedUser.teamId.toString(), 'team-2');
+    assert.notStrictEqual(updatedUser.team.name, 'team-1');
+    assert.strictEqual(updatedUser.team.name, 'team-2');
+    assert.strictEqual(updatedUser._id.toString(), user._id.toString());
+  });
+
+  it('removes a user', async () => {
+    const user = await createUser(app);
+
+    const removedUser = await app.service('users').remove(user._id);
+
+    assert.ok(removedUser, 'Removed a user');
+    assert.ok(removedUser._id, 'User has an id');
+  });
 });
