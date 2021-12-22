@@ -28,6 +28,9 @@ function createTeamIfNotExists(){
   return async (context: HookContext) => {
     const { data } = context;
     const { teamId } = data;
+    
+    if (!teamId) return context;
+
     let team = null;
     if (teamId instanceof Schema.Types.ObjectId)
       team = await context.app.service('teams').get(teamId);
