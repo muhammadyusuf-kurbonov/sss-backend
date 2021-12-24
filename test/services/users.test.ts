@@ -11,11 +11,13 @@ async function createUser(app: Application){
     fullName: 'John Doe',
     email: 'test@yahoom.com',
     teamId: 'team-1',
-  });
+  }).catch(err => console.log(err));
   return user;
 }
 
-describe('\'users\' service', () => {
+describe('\'users\' service', function() {
+  this.timeout(10000);
+  
   it('registered the service', () => {
     const service = app.service('users');
 
@@ -49,6 +51,8 @@ describe('\'users\' service', () => {
 
   it('finds a user by id', async () => {
     const user = await createUser(app);
+
+    await sleep(1000);
 
     const foundUser = await app.service('users').get(user._id);
 

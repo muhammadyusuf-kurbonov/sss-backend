@@ -7,7 +7,7 @@ import { Model, Mongoose } from 'mongoose';
 import { UserModel } from './users.model';
 
 export type TeamModel = {
-  id: string;
+  _id: string;
   name: string;
   score: number;
   members: UserModel[];
@@ -20,7 +20,6 @@ export default function (app: Application): Model<TeamModel> {
   const schema = new Schema({
     name: { type: String, required: true },
     score: { type: Number, required: true, default: 0 },
-    members: [{ type: Schema.Types.ObjectId, ref: 'users' }],
   }, {
     timestamps: true
   });

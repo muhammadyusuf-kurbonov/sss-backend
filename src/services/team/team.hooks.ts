@@ -1,4 +1,25 @@
-import { HooksObject } from '@feathersjs/feathers';
+import { HookContext } from '@feathersjs/feathers';
+import { fastJoin } from 'feathers-hooks-common';
+import { TeamModel } from '../../models/team.model';
+
+function populateMembers(){
+  const postResolvers = {
+    joins: {
+      members: () => async (team: TeamModel, context: HookContext) => {
+        const params = {
+          query: {
+            teamId: team._id.toString(),
+          },
+          paginate: false,
+        };
+        const users = await context.app.service('users')._find(params);
+        team.members = users;
+        return team;
+      },
+    }
+  };
+  return fastJoin(postResolvers);
+}
 
 export default {
   before: {
@@ -12,7 +33,7 @@ export default {
   },
 
   after: {
-    all: [],
+    all: [populateMembers()],
     find: [],
     get: [],
     create: [],

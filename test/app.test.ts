@@ -6,7 +6,7 @@ import axios from 'axios';
 import app from '../src/app';
 import {describe} from 'mocha';
 
-const port = app.get('port') || 8998;
+const port = 8998;
 const getUrl = (pathname?: string): string => url.format({
   hostname: app.get('host') || 'localhost',
   protocol: 'http',

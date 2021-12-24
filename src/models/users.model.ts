@@ -23,7 +23,7 @@ export default function (app: Application): Model<UserModel> {
     fullName: { type: String, required: true },
     email: { type: String, required: true },
     avatarUrl: { type: String, required: true },
-    teamId: { type: Schema.Types.ObjectId, ref: 'teams', required: true },
+    teamId: { type: String, required: true },
   }, {
     timestamps: true
   });

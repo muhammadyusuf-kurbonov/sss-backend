@@ -1,6 +1,6 @@
 import { UserModel } from './../../models/users.model';
 import { HookContext } from '@feathersjs/feathers';
-import { Schema } from 'mongoose';
+import { CastError, Schema } from 'mongoose';
 import {fastJoin} from 'feathers-hooks-common';
 function validateTeamId(){
   return async (context: HookContext) => {
@@ -31,14 +31,19 @@ function createTeamIfNotExists(){
     
     if (!teamId) return context;
 
-    let team = null;
-    if (teamId instanceof Schema.Types.ObjectId)
-      team = await context.app.service('teams').get(teamId);
-    if (!team) {
+    try{
+      const team = await context.app.service('teams').get(teamId, context.params);
+      if (!team) {
+        const {_id} = await context.app.service('teams').create({
+          name: teamId,
+        });
+        context.data.teamId = _id.toString();
+      }
+    } catch(err) {
       const {_id} = await context.app.service('teams').create({
         name: teamId,
       });
-      context.data.teamId = _id;
+      context.data.teamId = _id.toString();
     }
     return context;
   };
@@ -48,10 +53,8 @@ function populateTeam(){
   const postResolvers = {
     joins: {
       team: () => async (item: UserModel, context: HookContext) => {
-        const team = await context.app.service('teams').get(item.teamId);
-        if (team) {
-          item.team = team;
-        }
+        item.team = await context.app.service('teams')._get(item.teamId);
+        return item;
       }
     }
   };
