@@ -16,6 +16,37 @@ function populateJoins(){
   return fastJoin(postResolvers);
 }
 
+function updateTeamsScore() {
+  return async (context: HookContext) => {
+    const {data, result} = context;
+    if (data.points == undefined) return context;
+    const {teamId} = data && result;
+
+    const pointsModel = (await context.app.service('collected-points').Model.aggregate([
+      { $match: { teamId } },
+      { $group: { _id: null, points: { $sum: '$points' } } }
+    ]))[0];
+
+    const points = pointsModel ? pointsModel.points : 0;
+
+    await context.app.service('teams').patch(teamId, {  
+      score: points
+    });
+  };
+}
+
+function descreaseTeamsScore(){
+  return async (context: HookContext) => {
+    const {result} = context;
+    if (result.points == undefined) return context;
+    const {teamId} = result;
+
+    await context.app.service('teams').patch(teamId, {  
+      $inc: { score: -result.points }
+    });
+  };
+}
+
 export default {
   before: {
     all: [],
@@ -31,10 +62,10 @@ export default {
     all: [populateJoins()],
     find: [],
     get: [],
-    create: [],
+    create: [updateTeamsScore()],
     update: [],
-    patch: [],
-    remove: []
+    patch: [updateTeamsScore()],
+    remove: [descreaseTeamsScore()]
   },
 
   error: {
