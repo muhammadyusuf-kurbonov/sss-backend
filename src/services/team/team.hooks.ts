@@ -21,6 +21,18 @@ function populateMembers(){
   return fastJoin(postResolvers);
 }
 
+function removePoints(){
+  return async (context: HookContext) => {
+    const {id} = context;
+
+    await context.app.service('collected-points').remove(null, {  
+      query: {
+        teamId: id?.toString(),
+      },
+    });
+  };
+}
+
 export default {
   before: {
     all: [],
@@ -29,7 +41,7 @@ export default {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [removePoints()]
   },
 
   after: {

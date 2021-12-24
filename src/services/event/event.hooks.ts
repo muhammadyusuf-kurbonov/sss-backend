@@ -1,4 +1,16 @@
-import { HooksObject } from '@feathersjs/feathers';
+import { HookContext } from '@feathersjs/feathers';
+
+function removePoints(){
+  return async (context: HookContext) => {
+    const {id} = context;
+
+    await context.app.service('collected-points').remove(null, {  
+      query: {
+        eventId: id?.toString(),
+      },
+    });
+  };
+}
 
 export default {
   before: {
@@ -8,7 +20,7 @@ export default {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [removePoints()]
   },
 
   after: {

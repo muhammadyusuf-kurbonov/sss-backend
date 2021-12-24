@@ -61,7 +61,15 @@ describe('\'team\' service', function() {
 
     const removedTeam = await app.service('teams').remove(team._id);
 
+    const pointsOfTeam = await app.service('collected-points')._find({
+      query: {
+        teamId: team._id,
+      },
+      paginate: false,
+    });
+
     assert.ok(removedTeam, 'Returned removed team');
     assert.strictEqual(removedTeam._id.toString(), team._id.toString(), 'Removed the incorrect team');
+    assert.strictEqual(pointsOfTeam.length, 0, 'Team has points');
   });
 });

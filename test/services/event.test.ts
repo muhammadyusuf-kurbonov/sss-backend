@@ -67,9 +67,18 @@ describe('\'event\' service', () => {
     });
 
     const removed = await app.service('event').remove(_id);
+    const pointsForEvent = await app.service('collected-points')._find({
+      query: {
+        eventId: _id,
+      },
+      paginate: false,
+    });
 
     assert.ok(removed, 'Not removed a event');
     assert.ok(removed._id, 'Event has not an id');
     assert.strictEqual(removed.title, 'test-event', 'Event title is incorrect');
+    assert.strictEqual(removed.description, 'Test event for testing', 'Event description is incorrect');
+    assert.strictEqual(removed.maxScore, 100, 'Event maxScore is incorrect');
+    assert.strictEqual(pointsForEvent.length, 0, 'There left points of event');
   });
 });
