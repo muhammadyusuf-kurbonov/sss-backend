@@ -1,4 +1,20 @@
-import { HooksObject } from '@feathersjs/feathers';
+import { CollectedPointsModel } from './../../models/collected-points.model';
+import { HookContext } from '@feathersjs/feathers';
+import { fastJoin } from 'feathers-hooks-common';
+
+function populateJoins(){
+  const postResolvers = {
+    joins: {
+      team: () => async (item: CollectedPointsModel, context: HookContext) => {
+        item.team = await context.app.service('teams').get(item.teamId);
+      },
+      event: () => async (item: CollectedPointsModel, context: HookContext) => {
+        item.event = await context.app.service('event').get(item.eventId);
+      }
+    }
+  };
+  return fastJoin(postResolvers);
+}
 
 export default {
   before: {
@@ -12,7 +28,7 @@ export default {
   },
 
   after: {
-    all: [],
+    all: [populateJoins()],
     find: [],
     get: [],
     create: [],
