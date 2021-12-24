@@ -1,7 +1,6 @@
 import assert from 'assert';
 import app from '../../src/app';
 import {describe} from 'mocha';
-import { notFound } from '@feathersjs/express';
 
 describe('\'event\' service', () => {
   it('registered the service', () => {

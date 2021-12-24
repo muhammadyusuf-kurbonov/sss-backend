@@ -1,6 +1,5 @@
 import { UserModel } from './../../models/users.model';
 import { HookContext } from '@feathersjs/feathers';
-import { CastError, Schema } from 'mongoose';
 import {fastJoin} from 'feathers-hooks-common';
 function validateTeamId(){
   return async (context: HookContext) => {

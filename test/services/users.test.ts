@@ -4,7 +4,6 @@ import app from '../../src/app';
 import {describe} from 'mocha';
 import { UserModel } from '../../src/models/users.model';
 import { sleep } from '../utils';
-import { Paginated } from '@feathersjs/feathers';
 
 async function createUser(app: Application){
   const user = await app.service('users').create({
