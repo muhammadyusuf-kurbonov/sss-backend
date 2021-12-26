@@ -21,7 +21,7 @@ export default function (app: Application): Model<UserModel> {
   const { Schema } = mongooseClient;
   const schema = new Schema({
     fullName: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: false },
     avatarUrl: { type: String, required: true },
     teamId: { type: String, required: true },
   }, {
