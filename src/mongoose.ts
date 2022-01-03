@@ -4,7 +4,7 @@ import logger from './logger';
 
 function buildMongoUri(app: Application): string {
   if (!process.env.QOVERY_APPLICATION_Z30302B0F_NAME) return app.get('mongodb');
-  const pass = encodeURIComponent(process.env.QOVERY_MONGODB_ZF874FF2F_PASSWORD ?? '');
+  const pass = encodeURIComponent(process.env.QOVERY_MONGODB_ZF874FF2F_PASSWORD);
   return `mongodb://${process.env.QOVERY_MONGODB_ZF874FF2F_LOGIN}:${pass}@${process.env.QOVERY_MONGODB_ZF874FF2F_HOST}:${process.env.QOVERY_MONGODB_ZF874FF2F_PORT}/yahoom?authSource=${process.env.QOVERY_MONGODB_ZF874FF2F_DEFAULT_DATABASE_NAME}`;
 }
 
